@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" />
+    <title>SESI 6</title>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a onclick="reRender()" id="home">HOME</a>
+            <a onclick="darkMode()" id="mode">MODE</a>
+        </nav>
+        <h2 id="admin">SELAMAT DATANG ADMIN</h2>
+        <h2 id="basic">SELAMAT DATANG USER</h2>
+        <div class="root">
+            <input type="text" placeholder="username" id="usernameInput" />
+            <input type="password" placeholder="password" id="passwordInput" />
+            <button onclick="onLogin()" id="loginButton">LOGIN</button>
+            <button onclick="onLogout()" id="logoutButton">LOGOUT</button>
+            <!-- <button onclick="onDaftar()" id="daftarButton">DAFTAR</button> -->  
+        </div>
+        <p class="info" id="info"></p>
+    </div>
+
+     <!-- INITIALIZING FUNCTION SCRIPT -->
+     <script>
+        let body = document.body;
+        let info = document.getElementById('info');
+        let mode = document.getElementById('mode');
+        let home = document.getElementById('home');
+        let usernameInput = document.getElementById('usernameInput');
+        let passwordInput = document.getElementById('passwordInput');
+        let loginButton = document.getElementById('loginButton');
+        let logoutButton = document.getElementById('logoutButton');
+        let daftarButton = document.getElementById('daftarButton');
+        let admin = document.getElementById('admin');
+        let basic = document.getElementById('basic')
+
+        admin.style.display = "none";
+        basic.style.display = "none";
+        logoutButton.style.display = "none";
+        const darkLimit = 5;
+        let darkCounter = 0;
+        let darkRemainingleft;
+
+        function onLogin() {
+                localStorage.setItem("username", usernameInput.value);
+
+                if(usernameInput.value == "admin" && passwordInput.value == "admin123"){
+                    alert('SELAMAT DATANG ADMIN');
+                    usernameInput.style.display = "none"
+                    passwordInput.style.display = "none"
+                    loginButton.style.display = "none"
+                    logoutButton.style.display = "block"
+                    localStorage.setItem("role", "admin");
+                    admin.style.display = "block";
+                    basic.style.display = "none";
+                } else{
+                    alert('SELAMAT DATANG USER');
+                    usernameInput.style.display = "none"
+                    passwordInput.style.display = "none"
+                    loginButton.style.display = "none"
+                    logoutButton.style.display = "block"
+                    localStorage.setItem("role", "user");
+                    basic.style.display = "block";
+                    admin.style.display = "none";
+                }
+            }
+
+            if(localStorage.getItem('username')){
+                usernameInput.style.display = "none"
+                passwordInput.style.display = "none"
+                loginButton.style.display = "none"
+                logoutButton.style.display = "block"
+                if(localStorage.getItem('role') == "admin"){
+                    admin.style.display = "block";
+                    basic.style.display = "none";
+                }else{
+                    basic.style.display = "block";
+                    admin.style.display = "none";
+                }
+            }
+            function onLogout() {
+                localStorage.clear();
+                location.reload();
+            }
+
+        function darkMode() {
+            if(darkRemainingleft == 1){
+                info.textContent = "🎆  JATAH FITUR DARKMODE HABIS  🎆"
+                mode.style.display = "none"
+                home.textContent = "RESTART"
+                return;
+            }
+
+            darkCounter += 1;
+            darkRemainingleft = darkLimit - darkCounter;
+
+            console.log('dark mode di klik' , darkCounter);
+            console.log('kesempatan anda', darkRemainingleft);
+
+            //render ke info element
+            info.textContent =  `Darkmode dipakai ${darkCounter}x, tersisa ${darkRemainingleft}`
+            body.classList.toggle("dark");
+        }
+        function reRender() {
+            location.reload();
+        }
+     </script>
+</body>
+</html>
